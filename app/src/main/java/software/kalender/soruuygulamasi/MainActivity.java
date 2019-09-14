@@ -1,46 +1,30 @@
 package software.kalender.soruuygulamasi;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.google.android.gms.auth.api.Auth;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.drive.Drive;
 import com.google.android.gms.games.AchievementsClient;
 import com.google.android.gms.games.Games;
-import com.google.android.gms.games.GamesClient;
-import com.google.android.gms.games.LeaderboardsClient;
 import com.google.android.gms.games.SnapshotsClient;
-import com.google.android.gms.games.leaderboard.Leaderboard;
-import com.google.android.gms.games.leaderboard.ScoreSubmissionData;
 import com.google.android.gms.games.snapshot.Snapshot;
 import com.google.android.gms.games.snapshot.SnapshotMetadata;
 import com.google.android.gms.games.snapshot.SnapshotMetadataChange;
-import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-
-import java.io.IOException;
 
 import software.kalender.soruuygulamasi.Database.Database;
 import software.kalender.soruuygulamasi.Enums.RequestCodes;
@@ -48,8 +32,6 @@ import software.kalender.soruuygulamasi.Helpers.Config;
 import software.kalender.soruuygulamasi.Helpers.PlayerHelper;
 import software.kalender.soruuygulamasi.Helpers.Reporter;
 import software.kalender.soruuygulamasi.Helpers.SoundHelper;
-import software.kalender.soruuygulamasi.Objects.Output;
-import software.kalender.soruuygulamasi.Objects.Question;
 
 public class MainActivity extends AppCompatActivity {
     int count = 60;
@@ -336,5 +318,14 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception ex) {
             Reporter.error("M.ViewA", ex);
         }
+    }
+
+    public void newGame(View view) {
+        viewDifficulty();
+    }
+
+    public void viewDifficulty(){
+        //todo
+        viewCategories();
     }
 }
