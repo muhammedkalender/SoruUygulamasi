@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "184926241927",
+    "firebase_url": "https://soru-uygulamas-52108614.firebaseio.com",
+    "project_id": "soru-uygulamas-52108614",
+    "storage_bucket": "soru-uygulamas-52108614.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:184926241927:android:a22df38786bf41461b6422",
+        "android_client_info": {
+          "package_name": "software.kalender.soruuygulamasi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "184926241927-8lhj71n27u2lac0at61i9qcprf6jqehf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "software.kalender.soruuygulamasi",
+            "certificate_hash": "243ab05564e2963012d48597aedd182306f118d1"
+          }
+        },
+        {
+          "client_id": "184926241927-2uv1kr5c5vk94t4652ihl3u59no216ja.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3_KW1O4gx1gGlceGZh0XRHGyjuEtQvfU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "184926241927-2uv1kr5c5vk94t4652ihl3u59no216ja.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

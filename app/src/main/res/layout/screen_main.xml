@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <Button
+        android:onClick="resumeGame"
+        android:id="@+id/btnResume"
+        android:alpha="0.7"
+        android:clickable="false"
+        android:text="Devam Et"
+        android:layout_width="240dp"
+        android:layout_height="60dp" />
+
+    <Button
+        android:onClick="newGame"
+        android:id="@+id/btnNewGame"
+        android:text="Yeni Oyun"
+        android:layout_width="240dp"
+        android:layout_height="60dp" />
+
+    <Button
+        android:onClick="viewAchievement"
+        android:id="@+id/btnAchievements"
+        android:text="Başarımlar"
+        android:layout_width="240dp"
+        android:layout_height="60dp" />
+
+    <Button
+        android:onClick="viewLeaderBoard"
+        android:id="@+id/btnLeaderBoard"
+        android:text="Sıralama"
+        android:layout_width="240dp"
+        android:layout_height="60dp" />
+
+    <Button
+        android:onClick="viewSettings"
+        android:id="@+id/btnSettings"
+        android:text="Ayarlar"
+        android:layout_width="240dp"
+        android:layout_height="60dp" />
+
+</LinearLayout>

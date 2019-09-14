@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:orientation="vertical">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_centerInParent="true"
+        android:id="@+id/rlPopUp"
+        android:gravity="center"
+        android:layout_width="280dp"
+        android:layout_height="200dp">
+
+        <TextView
+            android:layout_centerInParent="true"
+            android:id="@+id/tvPopUp"
+            android:textColor="#000000"
+            android:text="asd asdas d asdasas dasdas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/btnPopUpOptionLeft"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:layout_width="120dp"
+            android:text="İptal"
+            android:layout_height="50dp" />
+
+        <Button
+            android:id="@+id/btnPopUpOptionRight"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_width="120dp"
+            android:text="Tamam"
+            android:layout_height="50dp" />
+
+    </RelativeLayout>
+
+</RelativeLayout></RelativeLayout>

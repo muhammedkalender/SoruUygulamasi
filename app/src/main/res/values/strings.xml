@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">SoruUygulamasi</string>
+
+    <!-- app_id -->
+    <string name="app_id" translatable="false">184926241927</string>
+    <!-- package_name -->
+    <string name="package_name" translatable="false">software.kalender.soruuygulamasi</string>
+    <!-- achievement Test -->
+    <string name="achievement_test" translatable="false">CgkIh4na87AFEAIQAQ</string>
+    <string name="achievement_test_2" translatable="false">CgkIh4na87AFEAIQAg</string>
+
+    <string name="leaderboard_test_skoru" translatable="false">CgkIh4na87AFEAIQAw</string>
+
+    <!-- leaderboard OIlayyy -->
+    <string name="leaderboard_oilayyy" translatable="false">CgkIh4na87AFEAIQBA</string>
+</resources>
