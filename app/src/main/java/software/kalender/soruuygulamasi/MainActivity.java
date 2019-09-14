@@ -326,6 +326,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void viewDifficulty(){
         //todo
-        viewCategories();
+       // viewCategories();
     }
 }
