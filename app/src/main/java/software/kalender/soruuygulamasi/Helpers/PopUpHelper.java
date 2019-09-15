@@ -32,6 +32,15 @@ public class PopUpHelper {
         this.optionClick = optionClick;
         this.context = Statics.context;
 
+        if(optionClick == null){
+            this.optionClick = new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    PopUpHelper.this.hideView();
+                }
+            };
+        }
+
         isWithOptions = false;
     }
 
@@ -78,6 +87,12 @@ public class PopUpHelper {
     }
 
     public void hideView(){
-        ((RelativeLayout)(view.getParent())).removeView(view);
+        try {
+            ((RelativeLayout)(view.getParent())).removeView(view);
+        }catch (Exception e){
+            Reporter.error("POPUP_REMOVE",e);
+        }
     }
+
+
 }

@@ -2,6 +2,9 @@ package software.kalender.soruuygulamasi.Helpers;
 
 import android.content.Context;
 
+import com.google.android.gms.games.Player;
+import com.google.firebase.database.Exclude;
+
 import software.kalender.soruuygulamasi.Enums.QuestionDifficulty;
 import software.kalender.soruuygulamasi.MainActivity;
 import software.kalender.soruuygulamasi.Statics;
@@ -10,7 +13,9 @@ public class PlayerHelper {
     private Context context;
 
     private String name;
+
     private String email;
+
     private int level = 0;
 
     private int life = 0;
@@ -54,6 +59,8 @@ public class PlayerHelper {
 
     private boolean isResuming = false;
 
+    private long lastUpdate;
+
     public PlayerHelper(Context context) {
         //todo
 
@@ -73,6 +80,47 @@ public class PlayerHelper {
         questionCombo = 0;
     }
 
+    public long getTotalPoint() {
+        return this.totalPoint;
+    }
+
+    public float getPointMultiplier() {
+        return pointMultiplier;
+    }
+
+    public int getJokerStatics() {
+        return jokerStatics;
+    }
+
+    public int getQuestionCombo() {
+        return questionCombo;
+    }
+
+    public int getQuestionSubCategory() {
+        return questionSubCategory;
+    }
+
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public long getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(long lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+
     //region Point
 
     public long getPoint() {
@@ -82,12 +130,14 @@ public class PlayerHelper {
     public void incrementPoint(long value) {
         //todo
         point += value;
+        totalPoint += value;
     }
 
     public void decrementPoint(long value) {
         //todo
 
         point -= value;
+        incrementSpentPoint(value);
     }
 
     //endregion
@@ -229,11 +279,13 @@ public class PlayerHelper {
         Statics.config.setInt("save_question_category", questionCategory);
         Statics.config.setInt("save_question_sub_category", questionSubCategory);
         Statics.config.setBoolean("save_resuming", isResuming);
+        Statics.config.setLong("last_update", lastUpdate);
+
+        Statics.firebase.saveGame();
     }
 
     public boolean readSave() {
         //todo
-
         try {
             life = Statics.config.getInt("save_life", life);
             point = Statics.config.getLong("save_point", point);
@@ -250,6 +302,7 @@ public class PlayerHelper {
             questionCategory = Statics.config.getInt("save_question_category", questionCategory);
             questionSubCategory = Statics.config.getInt("save_question_sub_category", questionSubCategory);
             isResuming = Statics.config.getBoolean("save_resuming", isResuming);
+            lastUpdate = Statics.config.getLong("last_update", System.currentTimeMillis() / 1000);
 
             return true;
         } catch (Exception e) {

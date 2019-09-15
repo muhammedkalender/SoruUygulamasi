@@ -18,7 +18,7 @@
         android:layout_alignParentRight="true"
         android:id="@+id/llJokerArea"
         android:layout_width="wrap_content"
-        android:layout_height="60dp"
+        android:layout_height="40dp"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -30,8 +30,8 @@
             <ImageView
                 android:background="#FE7F9C"
                 android:id="@+id/ivJokerPass"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 ></ImageView>
 
             <TextView
@@ -40,7 +40,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="5"
-                android:textSize="48sp" />
+                android:textSize="24sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -51,8 +51,8 @@
 
             <ImageView
                 android:id="@+id/ivJokerHalf"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:background="@color/cast_expanded_controller_ad_label_background_color"></ImageView>
 
             <TextView
@@ -61,7 +61,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="5"
-                android:textSize="48sp" />
+                android:textSize="24sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -72,8 +72,8 @@
 
             <ImageView
                 android:id="@+id/ivJokerDouble"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:background="#00ff00"></ImageView>
 
             <TextView
@@ -82,7 +82,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="5"
-                android:textSize="48sp" />
+                android:textSize="24sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -93,8 +93,8 @@
 
             <ImageView
                 android:id="@+id/ivJokerTime"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:background="#0000FF"></ImageView>
 
             <TextView
@@ -103,7 +103,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="5"
-                android:textSize="48sp" />
+                android:textSize="24sp" />
         </LinearLayout>
     </LinearLayout>
 

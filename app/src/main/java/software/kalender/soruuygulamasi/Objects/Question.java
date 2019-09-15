@@ -162,7 +162,6 @@ public class Question {
             }
         };
 
-        Statics.player.saveGame();
     }
 
 
@@ -291,6 +290,8 @@ public class Question {
             output.setTitle("Soru Getirilemedi");
             output.setMessage("Soru veritabanından getirilemedi");
             output.setException(e);
+
+            MainActivity.showScreen(R.id.screenMain);
 
             Reporter.error("TEST_CODE", e);
         }
@@ -481,6 +482,8 @@ public class Question {
         Statics.player.setResuming(true);
 
         MainActivity.showNextQuestion(remainingTime);
+
+        Statics.player.saveGame();
     }
 
     public void wrongAnswer() {
@@ -498,8 +501,9 @@ public class Question {
                     //reset todo
                     Statics.player.setResuming(false);
                     Statics.player.resetQuestion();
-                    MainActivity.showHomePage(null);
+                    MainActivity.showLoseScreen();
 
+                    Statics.player.saveGame();
                 }
             };
 
@@ -510,19 +514,23 @@ public class Question {
                     Statics.player.decrementLife();
                     load();
                     popUpHelper.hideView();
+
+                    Statics.player.saveGame();
                 }
             };
 
 
             popUpHelper = new PopUpHelper("Devam etmek için can kullanmak istermisiniz ?", "", "Hayır", "Evet", left, right);
             MainActivity.mainLayout.addView(popUpHelper.getView());
-            pauseGame();
+            isPaused = true;
         }else{
             isFinished = true;
             Statics.player.resetQuestion();
             Statics.player.setResuming(false);
 
             MainActivity.showLoseScreen();
+
+            Statics.player.saveGame();
         }
 
         Log.e("asdas", " kaybettin zenci");
@@ -539,11 +547,17 @@ public class Question {
 
     public void pauseGame() {
         //todo
+        MainActivity.showScreen(R.id.screenPause);
+
         isPaused = true;
+
     }
 
     public void resumeGame() {
         //todo
+        MainActivity.showScreen(R.id.screenQuestion);
+
         isPaused = false;
+
     }
 }
