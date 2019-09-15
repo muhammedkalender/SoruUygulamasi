@@ -220,7 +220,7 @@ public class Database extends SQLiteOpenHelper {
     }
 
     public void incrementTimeout(int id) {
-        this.execute("UPDATE questions SET quested = 1, is_skipped = 1, total_skipped = total_skipped + 1 WHERE id = "+id);
+        this.execute("UPDATE questions SET quested = 1, is_skipped = 1, total_skip = total_skip + 1 WHERE id = "+id);
     }
 
     //endregion

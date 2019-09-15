@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:visibility="invisible"
+    android:gravity="center"
     android:orientation="vertical">
 
     <TextView
@@ -14,11 +15,33 @@
         android:textSize="35sp" />
 
     <LinearLayout
+        android:layout_alignParentRight="true"
         android:id="@+id/llJokerArea"
         android:layout_width="wrap_content"
         android:layout_height="60dp"
-        android:layout_below="@id/tvTimer"
         android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/llJokerPass"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:background="#FE7F9C"
+                android:id="@+id/ivJokerPass"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                ></ImageView>
+
+            <TextView
+                android:id="@+id/tvJokerPass"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="5"
+                android:textSize="48sp" />
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/llJokerHalf"
@@ -51,7 +74,7 @@
                 android:id="@+id/ivJokerDouble"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:background="@color/cast_expanded_controller_ad_label_background_color"></ImageView>
+                android:background="#00ff00"></ImageView>
 
             <TextView
                 android:id="@+id/tvJokerDouble"
@@ -72,7 +95,7 @@
                 android:id="@+id/ivJokerTime"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:background="@color/cast_expanded_controller_ad_label_background_color"></ImageView>
+                android:background="#0000FF"></ImageView>
 
             <TextView
                 android:id="@+id/tvJokerTime"
@@ -87,7 +110,7 @@
     <TextView
         android:id="@+id/tvQuestion"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="240dp"
         android:layout_below="@id/llJokerArea"
         android:gravity="center"
         android:text="TEST" />
@@ -104,6 +127,7 @@
     <TextView
         android:id="@+id/tvAnswerB"
         android:layout_width="200dp"
+        android:layout_marginLeft="30dp"
         android:layout_height="50dp"
         android:layout_below="@id/tvQuestion"
         android:layout_toEndOf="@id/tvAnswerA"
@@ -122,6 +146,7 @@
     <TextView
         android:id="@+id/tvAnswerD"
         android:layout_width="200dp"
+        android:layout_marginLeft="30dp"
         android:layout_height="50dp"
         android:layout_below="@id/tvAnswerB"
         android:layout_toEndOf="@id/tvAnswerC"

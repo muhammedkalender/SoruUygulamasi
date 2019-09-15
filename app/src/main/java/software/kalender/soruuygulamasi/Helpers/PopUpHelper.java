@@ -2,6 +2,7 @@ package software.kalender.soruuygulamasi.Helpers;
 
 import android.content.Context;
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;

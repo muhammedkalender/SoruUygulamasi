@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,6 +19,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.drive.Drive;
 import com.google.android.gms.games.AchievementsClient;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.SnapshotsClient;
@@ -72,30 +74,23 @@ public class MainActivity extends AppCompatActivity {
         tvLife = findViewById(R.id.tvLife);
         tvPoint = findViewById(R.id.tvPoint);
 
-
         //endregion
 
         //region todo Test
 
-        Statics.player.incrementJokerHalf();
-        Statics.player.incrementJokerDouble();
-        Statics.player.incrementJokerTime();
-        Statics.player.incrementLife();
-        Statics.player.incrementLife();
-        Statics.player.incrementLife();
-        Statics.player.incrementLife();
+//        Statics.player.incrementJokerHalf();
+//        Statics.player.incrementJokerDouble();
+//        Statics.player.incrementJokerTime();
+//        Statics.player.incrementLife();
+//        Statics.player.incrementLife();
+//        Statics.player.incrementLife();
+//        Statics.player.incrementLife();
 
         //endregion
 
         firstOpen();
 
-        //todo
-        Statics.player.setResuming(true);
-
-        if (Statics.player.isResuming()) {
-            mainLayout.findViewById(R.id.btnResume).setAlpha(1);
-            mainLayout.findViewById(R.id.btnResume).setClickable(true);
-        }
+        showHomePage(null);
 
 //        Question question = new Question();
 //        question.loadFromDB(-1, -1);
@@ -130,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
         updateUI();
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -137,24 +133,6 @@ public class MainActivity extends AppCompatActivity {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
         }
-    }
-
-    private Task<SnapshotMetadata> writeSnapshot(Snapshot snapshot,
-                                                 byte[] data) {
-
-        // Set the data payload for the snapshot
-        snapshot.getSnapshotContents().writeBytes(data);
-
-        // Create the change operation
-        SnapshotMetadataChange metadataChange = new SnapshotMetadataChange.Builder()
-
-                .build();
-
-        SnapshotsClient snapshotsClient =
-                Games.getSnapshotsClient(this, account);
-
-        // Commit the operation
-        return snapshotsClient.commitAndClose(snapshot, metadataChange);
     }
 
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
@@ -182,113 +160,7 @@ public class MainActivity extends AppCompatActivity {
             Log.e("ASDASD AS DASD", "signInResult:failed code=" + e.getStatusCode());
 
         }
-    }
 
-    public void test(View v) {
-
-        achievementsClient = Games.getAchievementsClient(MainActivity.this, account);
-
-        findViewById(R.id.btnAchievements).setClickable(true);
-        //.submitScore(getString(R.string.leaderboard_test_skoru), 1337);
-
-        // LeaderboardsClient achievementsClient =    Games.getLeaderboardsClient(MainActivity.this, account);
-        //Games.getAchievementsClient(MainActivity.this, account).increment(getString(R.string.achievement_test_2), 10);
-//        achievementsClient.submitScore(getString(R.string.leaderboard_test_skoru), 1500);
-////        Games.getLeaderboardsClient(this, GoogleSignIn.getLastSignedInAccount(this)).submitScoreImmediate(getString(R.string.leaderboard_test_skoru), 1337).addOnCompleteListener(new OnCompleteListener<ScoreSubmissionData>() {
-////            @Override
-////            public void onComplete(@NonNull Task<ScoreSubmissionData> task) {
-////                Log.e("asdas", task.isSuccessful()?"e":"h");
-////            }
-////        });
-//        achievementsClient.submitScore(getString(R.string.leaderboard_oilayyy), 1500);
-
-
-    }
-
-    public void call(View v) {
-        test(v);
-        return;
-        //  final TextView timer = ((TextView) findViewById(R.id.timer));
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                for (i = 10; i > 0; i--) {
-//                    try {
-//                        Log.e("asdasd", "zxxxxxxxxxxxxx");
-//                        Thread.sleep(1000);
-//
-//
-//                               timer.setText("Kalan : "+i);
-//
-//                    } catch (InterruptedException e) {
-//                        Log.e("asdasd",e.getMessage()+"");
-//                    }
-//                }
-//
-//                Log.e("asdasdas", "asdasdasd");
-//            }
-//        }).run();
-//        AchievementsClient achievementsClient =    Games.getAchievementsClient(MainActivity.this, account);
-//        //Games.getAchievementsClient(MainActivity.this, account).increment(getString(R.string.achievement_test_2), 10);
-//       achievementsClient.unlock(getString(R.string.achievement_test));
-//
-//        new CountDownTimer(5000, 1000) {
-//
-//            public void onTick(long millisUntilFinished) {
-//                timer.setText("seconds remaining: " + millisUntilFinished / 1000);
-//            }
-//
-//            public void onFinish() {
-//                Games.getAchievementsClient(MainActivity.this, account).getAchievementsIntent().addOnSuccessListener(new OnSuccessListener<Intent>() {
-//                    @Override
-//                    public void onSuccess(Intent intent) {
-//                        startActivityForResult(intent, 123);
-//                    }
-//                });;
-//                //   mTextField.setText("done!");
-//            }
-//        }.start();
-    }
-
-    private void signInSilently() {
-
-        Log.e("asdasd", "başladı");
-        GoogleSignInOptions signInOptions = GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN;
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        if (GoogleSignIn.hasPermissions(account, signInOptions.getScopeArray())) {
-            // Already signed in.
-            // The signed in account is stored in the 'account' variable.
-            GoogleSignInAccount signedInAccount = account;
-
-            Log.e("loginli", signedInAccount.getId());
-        } else {
-
-            Log.e("adas,", "else düştü");
-            // Haven't been signed-in before. Try the silent sign-in first.
-            GoogleSignInClient signInClient = GoogleSignIn.getClient(this, signInOptions);
-            signInClient
-                    .silentSignIn()
-                    .addOnCompleteListener(
-                            this,
-                            new OnCompleteListener<GoogleSignInAccount>() {
-                                @Override
-                                public void onComplete(@NonNull Task<GoogleSignInAccount> task) {
-                                    if (task.isSuccessful()) {
-                                        // The signed in account is stored in the task's result.
-                                        GoogleSignInAccount signedInAccount = task.getResult();
-
-                                        Log.e("yeni", signedInAccount.getId());
-
-                                    } else {
-                                        Log.e("asdas", "hop");
-                                        // Player will need to sign-in explicitly using via UI.
-                                        // See [sign-in best practices](http://developers.google.com/games/services/checklist) for guidance on how and when to implement Interactive Sign-in,
-                                        // and [Performing Interactive Sign-in](http://developers.google.com/games/services/android/signin#performing_interactive_sign-in) for details on how to implement
-                                        // Interactive Sign-in.
-                                    }
-                                }
-                            });
-        }
     }
 
     public static void updateUI() {
@@ -342,13 +214,32 @@ public class MainActivity extends AppCompatActivity {
         viewCategory(null);
     }
 
-    public void showScreen(int id) {
-        findViewById(R.id.screenMain).setVisibility(View.INVISIBLE);
-        findViewById(R.id.screenDifficulty).setVisibility(View.INVISIBLE);
-        findViewById(R.id.screenCategories).setVisibility(View.INVISIBLE);
-        findViewById(R.id.screenQuestion).setVisibility(View.INVISIBLE);
+    public static void showScreen(int id) {
+        mainLayout.findViewById(R.id.screenMain).setVisibility(View.INVISIBLE);
+        mainLayout.findViewById(R.id.screenDifficulty).setVisibility(View.INVISIBLE);
+        mainLayout.findViewById(R.id.screenCategories).setVisibility(View.INVISIBLE);
+        mainLayout.findViewById(R.id.screenQuestion).setVisibility(View.INVISIBLE);
+        mainLayout.findViewById(R.id.screenAfterQuest).setVisibility(View.INVISIBLE);
+        mainLayout.findViewById(R.id.screenLoseGame).setVisibility(View.INVISIBLE);
 
-        findViewById(id).setVisibility(View.VISIBLE);
+        mainLayout.findViewById(id).setVisibility(View.VISIBLE);
+    }
+
+    public static void showHomePage(View view) {
+        //todo
+
+        if (Statics.player.isResuming()) {
+            mainLayout.findViewById(R.id.btnResume).setAlpha(1);
+            mainLayout.findViewById(R.id.btnResume).setClickable(true);
+        } else {
+            mainLayout.findViewById(R.id.btnResume).setAlpha(0.7f);
+            mainLayout.findViewById(R.id.btnResume).setClickable(false);
+        }
+
+        showScreen(R.id.screenMain);
+
+
+        updateUI();
     }
 
     public void viewCategory(View view) {
@@ -358,12 +249,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Log.e("zclick)", view.getTag()+"---");
+                Log.e("zclick)", view.getTag() + "---");
                 Statics.player.setQuestionCategory((int) view.getTag());
 
                 Question question = new Question();
                 question.loadFromDB(Statics.player.getQuestionCategory(), Statics.player.getQuestionDifficulty());
-question.loadView(findViewById(R.id.screenQuestion));
+                question.loadView(findViewById(R.id.screenQuestion));
                 showScreen(R.id.screenQuestion);
             }
         };
@@ -385,7 +276,7 @@ question.loadView(findViewById(R.id.screenQuestion));
 
             viewCategory.setOnClickListener(categoryClickListener);
             //todo icon
-            Log.e("asdas", "id"+categories[i].getId());
+            Log.e("asdas", "id" + categories[i].getId());
             viewCategory.setTag(categories[i].getId());
             ((TextView) viewCategory.findViewById(R.id.tvCategory)).setText(categories[i].getText());
 
@@ -412,5 +303,54 @@ question.loadView(findViewById(R.id.screenQuestion));
                 Statics.config.setBoolean("first_open", false);
             }
         }
+    }
+
+    public static void showNextQuestion(int remainingTime) {
+        if (remainingTime > 30) {
+            //3 Yıldız
+
+            ((ImageView) mainLayout.findViewById(R.id.ivStat1)).setBackgroundColor(Color.GREEN);
+            ((ImageView) mainLayout.findViewById(R.id.ivStat2)).setBackgroundColor(Color.GREEN);
+            ((ImageView) mainLayout.findViewById(R.id.ivStat3)).setBackgroundColor(Color.GREEN);
+        } else if (remainingTime > 15) {
+            //2 Yıldız
+
+            ((ImageView) mainLayout.findViewById(R.id.ivStat1)).setBackgroundColor(Color.GREEN);
+            ((ImageView) mainLayout.findViewById(R.id.ivStat2)).setBackgroundColor(Color.GREEN);
+            ((ImageView) mainLayout.findViewById(R.id.ivStat3)).setBackgroundColor(Color.RED);
+        } else if (remainingTime > 5) {
+            //1 Yıldız
+
+            ((ImageView) mainLayout.findViewById(R.id.ivStat1)).setBackgroundColor(Color.GREEN);
+            ((ImageView) mainLayout.findViewById(R.id.ivStat2)).setBackgroundColor(Color.RED);
+            ((ImageView) mainLayout.findViewById(R.id.ivStat3)).setBackgroundColor(Color.RED);
+        } else {
+            //0 Yıldız
+
+            ((ImageView) mainLayout.findViewById(R.id.ivStat1)).setBackgroundColor(Color.RED);
+            ((ImageView) mainLayout.findViewById(R.id.ivStat2)).setBackgroundColor(Color.RED);
+            ((ImageView) mainLayout.findViewById(R.id.ivStat3)).setBackgroundColor(Color.RED);
+        }
+
+        showScreen(R.id.screenAfterQuest);
+    }
+
+    public void loadNewQuestion(View view) {
+        Question question = new Question();
+        question.loadFromDB(Statics.player.getQuestionCategory(), Statics.player.getQuestionDifficulty());
+        question.loadView(findViewById(R.id.screenQuestion));
+        showScreen(R.id.screenQuestion);
+    }
+
+    public static void showLoseScreen() {
+        showScreen(R.id.screenLoseGame);
+    }
+
+    public void resumeGame(View view) {
+        Question question = new Question();
+        question.loadFromDB(Statics.player.getQuestionCategory(), Statics.player.getQuestionDifficulty());
+        question.loadView(mainLayout);
+
+        showScreen(R.id.screenQuestion);
     }
 }

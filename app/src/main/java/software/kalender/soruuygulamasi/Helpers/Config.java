@@ -35,6 +35,19 @@ public class Config {
 
     //region Set Configs
 
+    public boolean setLong(String _ID, long _VALUE) {
+        try {
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Statics.context);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putLong(_ID, _VALUE);
+            editor.apply();
+            return true;
+        } catch (Exception e) {
+            Reporter.error("SET_CONFIG_LONG", e);
+            return false;
+        }
+    }
+
     public boolean setInt(String _ID, int _VALUE) {
         try {
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Statics.context);
@@ -134,6 +147,18 @@ public class Config {
             return sharedPreferences.getFloat(_ID, _DEFAULT);
         } catch (Exception e) {
             Reporter.error("GET_CONFIG_FLOAT", e);
+
+            return _DEFAULT;
+        }
+    }
+
+    public long getLong(String _ID, long _DEFAULT) {
+        try {
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+
+            return sharedPreferences.getLong(_ID, _DEFAULT);
+        } catch (Exception e) {
+            Reporter.error("GET_CONFIG_LONG", e);
 
             return _DEFAULT;
         }

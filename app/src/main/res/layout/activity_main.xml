@@ -84,4 +84,20 @@
         android:layout_below="@id/llLife"
         android:visibility="invisible"></include>
 
+    <include
+        android:id="@+id/screenAfterQuest"
+        layout="@layout/screen_after_quest"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/llLife"
+        android:visibility="invisible"></include>
+
+    <include
+        android:id="@+id/screenLoseGame"
+        layout="@layout/screen_lose"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/llLife"
+        android:visibility="invisible"></include>
+
 </RelativeLayout>

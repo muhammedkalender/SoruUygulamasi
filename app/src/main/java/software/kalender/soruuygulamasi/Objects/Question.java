@@ -6,6 +6,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.games.Player;
+
 import java.util.Random;
 
 import software.kalender.soruuygulamasi.Enums.JokerEnum;
@@ -56,15 +58,10 @@ public class Question {
                 //todo
 
                 if (view == null) {
+                    Log.e("aasdas", "asdasd");
                     Statics.database.incrementTimeout(getId());
 
-                    for (int i = 0; i < 4; i++) {
-                        if ((char) tvAnswers[i].getTag() == 'A') {
-                            //todo
-                            tvAnswers[i].setBackgroundColor(Color.GREEN);
-                            break;
-                        }
-                    }
+                    wrongAnswer();
                 } else if ((char) view.getTag() == 'A') {
                     //Doğru
                     Statics.database.incrementCorrect(getId());
@@ -110,6 +107,9 @@ public class Question {
                     case JokerEnum.TIME:
                         jokerTime();
                         break;
+                    case JokerEnum.PASS:
+                        jokerPass();
+                        break;
                 }
 
                 view.setClickable(false);
@@ -123,7 +123,7 @@ public class Question {
             public void run() {
                 while (remainingTime != 0) {
                     if (isFinished) {
-                        break;
+                        return;
                     }
 
                     while (isPaused) {
@@ -135,10 +135,6 @@ public class Question {
                     }
 
                     //todo
-
-                    if (remainingTime == 0) {
-                        break;
-                    }
 
                     remainingTime--;
 
@@ -156,8 +152,17 @@ public class Question {
                     });
                 }
 
+                tvTimer.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        listenerAnswer.onClick(null);
+                    }
+                });
+
             }
         };
+
+        Statics.player.saveGame();
     }
 
 
@@ -372,6 +377,11 @@ public class Question {
         ((LinearLayout) _VIEW.findViewById(R.id.llJokerTime)).setOnClickListener(listenerJoker);
         ((LinearLayout) _VIEW.findViewById(R.id.llJokerTime)).setTag(JokerEnum.TIME);
 
+        //todo icon
+        ((TextView) _VIEW.findViewById(R.id.tvJokerPass)).setText(String.valueOf(Statics.player.getJokerPass()));
+        ((LinearLayout) _VIEW.findViewById(R.id.llJokerPass)).setOnClickListener(listenerJoker);
+        ((LinearLayout) _VIEW.findViewById(R.id.llJokerPass)).setTag(JokerEnum.PASS);
+
         MainActivity.updateUI();
 
         tvTimer = _VIEW.findViewById(R.id.tvTimer);
@@ -431,6 +441,16 @@ public class Question {
         }
     }
 
+    public void jokerPass(){
+        if (Statics.player.getJokerPass() > 0) {
+           correctAnswer();
+        } else {
+            //todo
+
+            Log.e("asdas", "jok111erin yok");
+        }
+    }
+
     public void jokerTime() {
         if (Statics.player.getJokerTime() > 0) {
             //todo
@@ -454,11 +474,13 @@ public class Question {
 
         Log.e("asdas", " kazandın zenci");
 
+        isFinished = true;
+
         Statics.player.incrementPoint(Statics.player.calcQuestionPoint());
         Statics.player.incrementQuestion();
+        Statics.player.setResuming(true);
 
-        load();
-
+        MainActivity.showNextQuestion(remainingTime);
     }
 
     public void wrongAnswer() {
@@ -470,6 +492,14 @@ public class Question {
                 @Override
                 public void onClick(View view) {
                     //todo sayfa aç
+
+                    popUpHelper.hideView();
+
+                    //reset todo
+                    Statics.player.setResuming(false);
+                    Statics.player.resetQuestion();
+                    MainActivity.showHomePage(null);
+
                 }
             };
 
@@ -487,6 +517,12 @@ public class Question {
             popUpHelper = new PopUpHelper("Devam etmek için can kullanmak istermisiniz ?", "", "Hayır", "Evet", left, right);
             MainActivity.mainLayout.addView(popUpHelper.getView());
             pauseGame();
+        }else{
+            isFinished = true;
+            Statics.player.resetQuestion();
+            Statics.player.setResuming(false);
+
+            MainActivity.showLoseScreen();
         }
 
         Log.e("asdas", " kaybettin zenci");
