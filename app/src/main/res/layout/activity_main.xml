@@ -15,15 +15,19 @@
         android:orientation="horizontal">
 
         <ImageView
+            android:background="#000"
             android:id="@+id/ivPoint"
             android:layout_width="60dp"
             android:layout_height="60dp" />
 
         <TextView
+            android:textSize="28sp"
+            android:text="195265896"
             android:id="@+id/tvPoint"
+            android:minWidth="40dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical" />
+            android:layout_height="match_parent"
+            android:gravity="center" />
     </LinearLayout>
 
     <LinearLayout
@@ -35,28 +39,49 @@
         android:orientation="horizontal">
 
         <ImageView
+            android:background="#000"
             android:id="@+id/ivLife"
             android:layout_width="60dp"
             android:layout_height="60dp" />
 
         <TextView
+            android:textSize="28sp"
+            android:text="3"
             android:id="@+id/tvLife"
+            android:minWidth="40dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical" />
+            android:layout_height="match_parent"
+            android:gravity="center" />
     </LinearLayout>
 
-
     <include
+        android:id="@+id/screenMain"
         layout="@layout/screen_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/llLife"></include>
 
     <include
+        android:id="@+id/screenQuestion"
         layout="@layout/screen_question"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/llLife"></include>
+
+    <include
+        android:id="@+id/screenDifficulty"
+        layout="@layout/screen_difficulty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/llLife"
+        android:visibility="invisible"></include>
+
+    <include
+        android:id="@+id/screenCategories"
+        layout="@layout/screen_categories"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/llLife"
+        android:visibility="invisible"></include>
 
 </RelativeLayout>

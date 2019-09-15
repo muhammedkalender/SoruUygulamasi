@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -26,12 +28,18 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
+import org.w3c.dom.Text;
+
 import software.kalender.soruuygulamasi.Database.Database;
 import software.kalender.soruuygulamasi.Enums.RequestCodes;
+import software.kalender.soruuygulamasi.Helpers.AssetsHelper;
 import software.kalender.soruuygulamasi.Helpers.Config;
 import software.kalender.soruuygulamasi.Helpers.PlayerHelper;
 import software.kalender.soruuygulamasi.Helpers.Reporter;
 import software.kalender.soruuygulamasi.Helpers.SoundHelper;
+import software.kalender.soruuygulamasi.Helpers.TextHelper;
+import software.kalender.soruuygulamasi.Objects.Category;
+import software.kalender.soruuygulamasi.Objects.Question;
 
 public class MainActivity extends AppCompatActivity {
     int count = 60;
@@ -58,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
         Statics.config = new Config(this);
         Statics.soundHelper = new SoundHelper(this);
         Statics.player = new PlayerHelper(this);
+        Statics.textHelper = new TextHelper();
 
         mainLayout = findViewById(R.id.rlMain);
         tvLife = findViewById(R.id.tvLife);
@@ -78,10 +87,12 @@ public class MainActivity extends AppCompatActivity {
 
         //endregion
 
+        firstOpen();
+
         //todo
         Statics.player.setResuming(true);
 
-        if(Statics.player.isResuming()){
+        if (Statics.player.isResuming()) {
             mainLayout.findViewById(R.id.btnResume).setAlpha(1);
             mainLayout.findViewById(R.id.btnResume).setClickable(true);
         }
@@ -284,7 +295,6 @@ public class MainActivity extends AppCompatActivity {
         //todo
 
 
-
         tvLife.setText(String.valueOf(Statics.player.getLife()));
         tvPoint.setText(String.valueOf(Statics.player.getPoint()));
 
@@ -324,8 +334,83 @@ public class MainActivity extends AppCompatActivity {
         viewDifficulty();
     }
 
-    public void viewDifficulty(){
+    public void viewDifficulty() {
         //todo
-       // viewCategories();
+        // viewCategories();
+
+        //todo showScreen(R.id.screenDifficulty);
+        viewCategory(null);
+    }
+
+    public void showScreen(int id) {
+        findViewById(R.id.screenMain).setVisibility(View.INVISIBLE);
+        findViewById(R.id.screenDifficulty).setVisibility(View.INVISIBLE);
+        findViewById(R.id.screenCategories).setVisibility(View.INVISIBLE);
+        findViewById(R.id.screenQuestion).setVisibility(View.INVISIBLE);
+
+        findViewById(id).setVisibility(View.VISIBLE);
+    }
+
+    public void viewCategory(View view) {
+        //todo
+
+        View.OnClickListener categoryClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Log.e("zclick)", view.getTag()+"---");
+                Statics.player.setQuestionCategory((int) view.getTag());
+
+                Question question = new Question();
+                question.loadFromDB(Statics.player.getQuestionCategory(), Statics.player.getQuestionDifficulty());
+question.loadView(findViewById(R.id.screenQuestion));
+                showScreen(R.id.screenQuestion);
+            }
+        };
+
+        LinearLayout llCategories = findViewById(R.id.llCategories);
+        llCategories.removeAllViews();
+
+        Category[] categories = Statics.database.getCategories();
+
+        View viewCategory = View.inflate(MainActivity.this, R.layout.screen_categories_object, null);
+        viewCategory.setOnClickListener(categoryClickListener);
+        //todo icon
+        viewCategory.setTag(-1);
+        ((TextView) viewCategory.findViewById(R.id.tvCategory)).setText("Karışık");
+        llCategories.addView(viewCategory);
+
+        for (int i = 0; i < categories.length; i++) {
+            viewCategory = View.inflate(MainActivity.this, R.layout.screen_categories_object, null);
+
+            viewCategory.setOnClickListener(categoryClickListener);
+            //todo icon
+            Log.e("asdas", "id"+categories[i].getId());
+            viewCategory.setTag(categories[i].getId());
+            ((TextView) viewCategory.findViewById(R.id.tvCategory)).setText(categories[i].getText());
+
+            llCategories.addView(viewCategory);
+        }
+
+        showScreen(R.id.screenCategories);
+    }
+
+    public void firstOpen() {
+        if (Statics.config.getBoolean("first_open", true)) {
+            AssetsHelper assetsHelper = new AssetsHelper();
+            String result = assetsHelper.read("db.sql", MainActivity.this);
+
+            if (!result.equals("")) {
+                String query[] = result.split(";");
+
+                for (int i = 0; i < query.length; i++) {
+                    Statics.database.execute(query[i]);
+
+                    Log.e("EXECUTED", query[i]);
+                }
+
+                Statics.config.setBoolean("first_open", false);
+            }
+        }
     }
 }

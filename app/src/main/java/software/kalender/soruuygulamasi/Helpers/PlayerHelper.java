@@ -177,6 +177,10 @@ public class PlayerHelper {
         this.life++;
     }
 
+    public void setQuestionCategory(int questionCategory){
+        this.questionCategory = questionCategory;
+    }
+
     public int getQuestionCategory(){
         return this.questionCategory;
     }

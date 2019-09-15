@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_centerInParent="true"
+        android:id="@+id/llCategory"
+        android:orientation="horizontal"
+        android:layout_width="240dp"
+        android:layout_height="60dp" >
+
+        <ImageView
+            android:id="@+id/ivCategory"
+            android:layout_width="60dp"
+            android:layout_height="60dp" />
+        <TextView
+            android:id="@+id/tvCategory"
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+</RelativeLayout>

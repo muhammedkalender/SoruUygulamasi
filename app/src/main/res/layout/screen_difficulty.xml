@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:gravity="center"
+    android:layout_height="match_parent">
+    <Button
+        android:onClick="viewCategory"
+        android:id="@+id/btnDifficultyMix"
+        android:text="Karışık"
+        android:tag="-1"
+        android:layout_width="240dp"
+        android:layout_height="60dp" />
+
+    <Button
+        android:onClick="viewCategory"
+        android:id="@+id/btnDifficultyEasy"
+        android:text="Kolay"
+        android:layout_width="240dp"
+        android:tag="0"
+        android:layout_height="60dp" />
+
+    <Button
+        android:onClick="viewCategory"
+        android:id="@+id/btnDifficultyMedium"
+        android:text="Orta"
+        android:tag="1"
+        android:layout_width="240dp"
+        android:layout_height="60dp" />
+
+    <Button
+        android:onClick="viewCategory"
+        android:tag="2"
+        android:id="@+id/btnDifficultyHard"
+        android:text="Zor"
+        android:layout_width="240dp"
+        android:layout_height="60dp" />
+</LinearLayout>

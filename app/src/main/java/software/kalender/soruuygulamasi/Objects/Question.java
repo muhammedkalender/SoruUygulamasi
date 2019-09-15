@@ -55,14 +55,26 @@ public class Question {
             public void onClick(View view) {
                 //todo
 
-                Log.e("asdas", "casda" + view.getTag());
-                if ((char) view.getTag() == 'A') {
+                if (view == null) {
+                    Statics.database.incrementTimeout(getId());
+
+                    for (int i = 0; i < 4; i++) {
+                        if ((char) tvAnswers[i].getTag() == 'A') {
+                            //todo
+                            tvAnswers[i].setBackgroundColor(Color.GREEN);
+                            break;
+                        }
+                    }
+                } else if ((char) view.getTag() == 'A') {
                     //Doğru
+                    Statics.database.incrementCorrect(getId());
 
                     view.setBackgroundColor(Color.GREEN);
 
                     correctAnswer();
                 } else {
+                    Statics.database.decrementCorrect(getId(), Character.toLowerCase((char) view.getTag()));
+
                     view.setBackgroundColor(Color.RED);
                     view.setClickable(false);
 
@@ -114,7 +126,7 @@ public class Question {
                         break;
                     }
 
-                    while (isPaused){
+                    while (isPaused) {
                         try {
                             Thread.sleep(500);
                         } catch (InterruptedException e) {
@@ -196,7 +208,7 @@ public class Question {
     }
 
     public void setQuestion(String question) {
-        this.question = question;
+        this.question = Statics.textHelper.decode(question);
     }
 
     public String getAnswerA() {
@@ -204,7 +216,7 @@ public class Question {
     }
 
     public void setAnswerA(String answerA) {
-        this.answerA = answerA;
+        this.answerA = Statics.textHelper.decode(answerA);
     }
 
     public String getAnswerB() {
@@ -212,7 +224,7 @@ public class Question {
     }
 
     public void setAnswerB(String answerB) {
-        this.answerB = answerB;
+        this.answerB = Statics.textHelper.decode(answerB);
     }
 
     public String getAnswerC() {
@@ -220,7 +232,7 @@ public class Question {
     }
 
     public void setAnswerC(String answerC) {
-        this.answerC = answerC;
+        this.answerC = Statics.textHelper.decode(answerC);
     }
 
     public String getAnswerD() {
@@ -228,7 +240,7 @@ public class Question {
     }
 
     public void setAnswerD(String answerD) {
-        this.answerD = answerD;
+        this.answerD = Statics.textHelper.decode(answerD);
     }
 
     //endregion
@@ -331,15 +343,15 @@ public class Question {
 
             String prefix = "A)";
 
-            if(i == 1){
+            if (i == 1) {
                 prefix = "B)";
-            }else if(i == 2){
+            } else if (i == 2) {
                 prefix = "C)";
-            }else if(i == 3){
+            } else if (i == 3) {
                 prefix = "D)";
             }
 
-            tvAnswers[i].setText(prefix+ tvAnswers[i].getText());
+            tvAnswers[i].setText(prefix + tvAnswers[i].getText());
             tvAnswers[i].setBackgroundColor(Color.WHITE); //todo
             tvAnswers[i].setClickable(true);
             tvAnswers[i].setOnClickListener(listenerAnswer);
@@ -489,12 +501,12 @@ public class Question {
         question.loadView(view);
     }
 
-    public void pauseGame(){
+    public void pauseGame() {
         //todo
         isPaused = true;
     }
 
-    public void resumeGame(){
+    public void resumeGame() {
         //todo
         isPaused = false;
     }
