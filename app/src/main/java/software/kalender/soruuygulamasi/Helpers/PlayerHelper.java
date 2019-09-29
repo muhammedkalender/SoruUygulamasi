@@ -3,8 +3,9 @@ package software.kalender.soruuygulamasi.Helpers;
 import android.content.Context;
 
 import com.google.android.gms.games.Player;
-import com.google.firebase.database.Exclude;
 
+
+import software.kalender.soruuygulamasi.Animations.TextAnimation;
 import software.kalender.soruuygulamasi.Enums.QuestionDifficulty;
 import software.kalender.soruuygulamasi.MainActivity;
 import software.kalender.soruuygulamasi.Statics;
@@ -61,10 +62,14 @@ public class PlayerHelper {
 
     private long lastUpdate;
 
+    private TextAnimation textAnimation;
+
     public PlayerHelper(Context context) {
         //todo
 
         this.context = context;
+
+        textAnimation = new TextAnimation();
 
         readSave();
 
@@ -129,6 +134,8 @@ public class PlayerHelper {
 
     public void incrementPoint(long value) {
         //todo
+        textAnimation.animate(MainActivity.tvPoint, this.point, this.point + value);
+
         point += value;
         totalPoint += value;
     }

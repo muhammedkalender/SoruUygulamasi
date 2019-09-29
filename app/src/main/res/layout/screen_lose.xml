@@ -47,7 +47,7 @@
                 android:id="@+id/ivHomePage"
                 android:layout_width="80dp"
                 android:layout_height="60dp"
-                android:background="#000" />
+               android:src="@drawable/ic_home" />
 
             <TextView
                 android:id="@+id/tvHomePage"
@@ -71,7 +71,7 @@
                 android:id="@+id/ivNewGame"
                 android:layout_width="80dp"
                 android:layout_height="60dp"
-                android:background="#000" />
+              android:src="@drawable/ic_refresh" />
 
             <TextView
                 android:id="@+id/tvNewGame"

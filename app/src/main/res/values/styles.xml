@@ -7,5 +7,35 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+    
+    <style name="styleJokerCountText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:text">@string/test_text_number</item>
+        <item name="android:textSize">@dimen/jokerTextCountSize</item>
+    </style>
+
+    <style name="styleButton">
+        <item name="android:background">@drawable/btn_normal</item>
+        <item name="android:layout_width">@dimen/dimenButtonWidth</item>
+        <item name="android:layout_height">@dimen/dimenButtonHeight</item>
+        <item name="android:layout_margin">@dimen/small_margin</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:paddingLeft">@dimen/normal_margin</item>
+        <item name="android:drawablePadding">@dimen/dimenButtonPadding</item>
+    </style>
+
+    <style name="styleAnswerButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:background">@drawable/btn_answer</item>
+        <item name="android:layout_height">@dimen/dimenAnswerButtonHeight</item>
+        <item name="android:layout_margin">@dimen/dimenAnswerButtonMargin</item>
+        <item name="android:gravity">center_vertical|left</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textScaleX">1.2</item>
+        <item name="android:paddingLeft">@dimen/dimenAnswerButtonPadding</item>
+    </style>
 
 </resources>

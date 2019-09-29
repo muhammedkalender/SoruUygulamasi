@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="small_margin">8dp</dimen>
+    <dimen name="normal_margin">16dp</dimen>
+
+    <dimen name="jokerTextCountSize">24sp</dimen>
+
+    <dimen name="timerTextSize">32sp</dimen>
+<dimen name="questionHeight">240dp</dimen>
+
+    <dimen name="normal_icon_size">48dp</dimen>
+
+
+    <dimen name="dimenJokerSize">36dp</dimen>
+
+    <dimen name="dimenButtonParentWidth">400dp</dimen>
+    <dimen name="dimenButtonWidth">240dp</dimen>
+    <dimen name="dimenButtonHeight">48dp</dimen>
+    <dimen name="dimenButtonPadding">-16dp</dimen>
+
+    <dimen name="dimenAnswerButtonParent">80dp</dimen>
+    <dimen name="dimenAnswerButtonHeight">64dp</dimen>
+    <dimen name="dimenAnswerButtonMargin">8dp</dimen>
+    <dimen name="dimenAnswerButtonPadding">8dp</dimen>
+
+</resources>

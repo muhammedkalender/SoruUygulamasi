@@ -13,4 +13,9 @@
 
     <!-- leaderboard OIlayyy -->
     <string name="leaderboard_oilayyy" translatable="false">CgkIh4na87AFEAIQBA</string>
+
+    <string name="popup_video_reward">Video izlerseniz jokerleri belli oranlarla kazanabilirsiniz.\nYarı Yarıya : %1$d, Çift Cevap : %2$d, Zaman : %3$d, Pass : %4$d</string>
+    <string name="test_text_short">A) XXXXX</string>
+    <string name="test_text_number">XX</string>
+    <string name="joker_time">Zaman Jokeri</string>
 </resources>

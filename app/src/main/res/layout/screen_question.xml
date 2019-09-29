@@ -3,153 +3,154 @@
     android:id="@+id/rlScreenQuestion"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:visibility="invisible"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:visibility="invisible">
+
+    <ImageView
+        android:id="@+id/ivTimer"
+        android:layout_width="@dimen/normal_icon_size"
+        android:layout_height="@dimen/normal_icon_size"
+        android:layout_marginStart="@dimen/small_margin"
+        android:src="@drawable/ic_timer" />
 
     <TextView
         android:id="@+id/tvTimer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="1"
-        android:textSize="35sp" />
+        android:layout_marginStart="@dimen/small_margin"
+        android:layout_toEndOf="@id/ivTimer"
+        android:text="@string/test_text_number"
+        android:textSize="@dimen/timerTextSize" />
 
     <LinearLayout
-        android:layout_alignParentRight="true"
         android:id="@+id/llJokerArea"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_height="@dimen/dimenJokerSize"
+        android:layout_alignParentEnd="true"
         android:orientation="horizontal">
-
-        <LinearLayout
-            android:id="@+id/llJokerPass"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:background="#FE7F9C"
-                android:id="@+id/ivJokerPass"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                ></ImageView>
-
-            <TextView
-                android:id="@+id/tvJokerPass"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="5"
-                android:textSize="24sp" />
-        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/llJokerHalf"
             android:layout_width="wrap_content"
+            android:layout_marginStart="@dimen/small_margin"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/ivJokerHalf"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@color/cast_expanded_controller_ad_label_background_color"></ImageView>
+                android:layout_width="@dimen/dimenJokerSize"
+                android:layout_height="@dimen/dimenJokerSize"
+                android:src="@drawable/ic_tonality" />
 
             <TextView
                 android:id="@+id/tvJokerHalf"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="5"
-                android:textSize="24sp" />
+                style="@style/styleJokerCountText" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/llJokerDouble"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/small_margin"
+
             android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/ivJokerDouble"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="#00ff00"></ImageView>
+                android:layout_width="@dimen/dimenJokerSize"
+                android:layout_height="@dimen/dimenJokerSize"
+                android:src="@drawable/ic_done_all" />
 
             <TextView
                 android:id="@+id/tvJokerDouble"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="5"
-                android:textSize="24sp" />
+                style="@style/styleJokerCountText" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/llJokerTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/small_margin"
+
             android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/ivJokerTime"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="#0000FF"></ImageView>
+                android:layout_width="@dimen/dimenJokerSize"
+                android:layout_height="@dimen/dimenJokerSize"
+                android:contentDescription="@string/joker_time"
+                android:src="@drawable/ic_add_alarm" />
 
             <TextView
                 android:id="@+id/tvJokerTime"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="5"
-                android:textSize="24sp" />
+                style="@style/styleJokerCountText" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llJokerPass"
+            android:layout_marginStart="@dimen/small_margin"
+            android:layout_marginEnd="@dimen/small_margin"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/ivJokerPass"
+                android:layout_width="@dimen/dimenJokerSize"
+                android:layout_height="@dimen/dimenJokerSize"
+                android:src="@drawable/ic_play_arrow" />
+
+            <TextView
+                android:id="@+id/tvJokerPass"
+                style="@style/styleJokerCountText" />
         </LinearLayout>
     </LinearLayout>
 
     <TextView
         android:id="@+id/tvQuestion"
         android:layout_width="match_parent"
-        android:layout_height="240dp"
+        android:layout_margin="@dimen/normal_margin"
+        android:layout_height="@dimen/questionHeight"
         android:layout_below="@id/llJokerArea"
         android:gravity="center"
-        android:text="TEST" />
+        android:text="@string/test_text_short" />
 
-    <TextView
-        android:id="@+id/tvAnswerA"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
+    <LinearLayout
+        android:id="@+id/llButton"
+        android:layout_width="@dimen/dimenButtonParentWidth"
+        android:layout_height="@dimen/dimenAnswerButtonParent"
         android:layout_below="@id/tvQuestion"
-        android:gravity="center_vertical"
-        android:onClick="test"
-        android:text="A)TEXT" />
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/tvAnswerB"
-        android:layout_width="200dp"
-        android:layout_marginLeft="30dp"
-        android:layout_height="50dp"
-        android:layout_below="@id/tvQuestion"
-        android:layout_toEndOf="@id/tvAnswerA"
-        android:gravity="center_vertical"
-        android:text="A)TEXT" />
+        <Button
+            android:id="@+id/tvAnswerA"
+            style="@style/styleAnswerButton"
+            android:text="@string/test_text_short" />
 
+        <Button
+            android:id="@+id/tvAnswerB"
+            style="@style/styleAnswerButton"
+            android:text="@string/test_text_short" />
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/tvAnswerC"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:layout_below="@id/tvAnswerA"
-        android:gravity="center_vertical"
-        android:text="A)TEXT" />
+    <LinearLayout
+        android:layout_width="@dimen/dimenButtonParentWidth"
+        android:layout_height="@dimen/dimenAnswerButtonParent"
+        android:layout_below="@id/llButton"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/tvAnswerD"
-        android:layout_width="200dp"
-        android:layout_marginLeft="30dp"
-        android:layout_height="50dp"
-        android:layout_below="@id/tvAnswerB"
-        android:layout_toEndOf="@id/tvAnswerC"
-        android:gravity="center_vertical"
-        android:text="A)TEXT" />
+        <Button
+            android:id="@+id/tvAnswerC"
+            style="@style/styleAnswerButton"
+            android:text="@string/test_text_short" />
+
+        <Button
+            android:id="@+id/tvAnswerD"
+            style="@style/styleAnswerButton"
+            android:text="@string/test_text_short" />
+    </LinearLayout>
 </RelativeLayout>

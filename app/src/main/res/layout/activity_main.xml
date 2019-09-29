@@ -7,6 +7,17 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+
+    <ImageView
+        android:id="@+id/ivPause"
+        android:layout_width="@dimen/normal_icon_size"
+        android:visibility="invisible"
+        android:layout_height="@dimen/normal_icon_size"
+        android:layout_marginLeft="4dp"
+        android:onClick="pauseGame"
+        android:src="@drawable/ic_pause_circle_outline" />
+
+
     <LinearLayout
         android:id="@+id/llPoint"
         android:layout_width="wrap_content"
@@ -15,7 +26,7 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:background="#000"
+            android:src="@drawable/ic_monetization_on"
             android:id="@+id/ivPoint"
             android:layout_width="60dp"
             android:layout_height="60dp" />
@@ -39,7 +50,7 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:background="#000"
+            android:src="@drawable/ic_favorite"
             android:id="@+id/ivLife"
             android:layout_width="60dp"
             android:layout_height="60dp" />
@@ -132,14 +143,16 @@
 
 
 
-    <!--<com.google.android.gms.ads.AdView-->
-        <!--xmlns:ads="http://schemas.android.com/apk/res-auto"-->
-        <!--android:id="@+id/adView"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--ads:adSize="BANNER"-->
-        <!--ads:adUnitId="ca-app-pub-3940256099942544/6300978111">-->
-    <!--</com.google.android.gms.ads.AdView>-->
+
+
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="ca-app-pub-3940256099942544/6300978111">
+    </com.google.android.gms.ads.AdView>
 </RelativeLayout>

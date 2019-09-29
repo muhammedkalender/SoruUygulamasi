@@ -28,27 +28,27 @@
             android:textSize="28sp" />
 
         <ImageView
-            android:id="@+id/ivStat1"
+            android:id="@+id/ivStar1"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_below="@id/tvCongratulations"
-            android:background="#000" />
+      />
 
         <ImageView
-            android:id="@+id/ivStat2"
+            android:id="@+id/ivStar2"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_below="@id/tvCongratulations"
             android:layout_centerHorizontal="true"
-            android:background="#000" />
+      />
 
         <ImageView
-            android:id="@+id/ivStat3"
+            android:id="@+id/ivStar3"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_below="@id/tvCongratulations"
             android:layout_alignParentRight="true"
-            android:background="#000" />
+         />
     </RelativeLayout>
 
     <LinearLayout
@@ -70,7 +70,7 @@
                 android:id="@+id/ivHomePage"
                 android:layout_width="80dp"
                 android:layout_height="60dp"
-                android:background="#000" />
+               android:src="@drawable/ic_home" />
 
             <TextView
                 android:id="@+id/tvHomePage"
@@ -94,7 +94,7 @@
                 android:id="@+id/ivNextQuestion"
                 android:layout_width="80dp"
                 android:layout_height="60dp"
-                android:background="#000" />
+              android:src="@drawable/ic_play_arrow" />
 
             <TextView
                 android:id="@+id/tvNextQuestion"

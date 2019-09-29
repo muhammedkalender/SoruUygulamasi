@@ -1,15 +1,17 @@
 package software.kalender.soruuygulamasi.Objects;
 
+import android.app.Activity;
 import android.graphics.Color;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.games.Player;
-
 import java.util.Random;
 
+import software.kalender.soruuygulamasi.Consts;
 import software.kalender.soruuygulamasi.Enums.JokerEnum;
 import software.kalender.soruuygulamasi.Helpers.PopUpHelper;
 import software.kalender.soruuygulamasi.Helpers.Reporter;
@@ -47,15 +49,16 @@ public class Question {
     private boolean isFinished = false;
     private boolean isPaused = false;
 
-    private PopUpHelper popUpHelper;
-
     public Question() {
-        remainingTime = 60; //todo
+        remainingTime = Consts.QUESTION_TIME;
 
         listenerAnswer = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //todo
+                if(isFinished){
+                    return;
+                }
 
                 if (view == null) {
                     Log.e("aasdas", "asdasd");
@@ -66,13 +69,14 @@ public class Question {
                     //Doğru
                     Statics.database.incrementCorrect(getId());
 
-                    view.setBackgroundColor(Color.GREEN);
+                    ((Button) view).setBackground(Statics.getDrawable(R.drawable.btn_answer_correct));
 
                     correctAnswer();
                 } else {
                     Statics.database.decrementCorrect(getId(), Character.toLowerCase((char) view.getTag()));
 
-                    view.setBackgroundColor(Color.RED);
+                    ((Button) view).setBackground(Statics.getDrawable(R.drawable.btn_answer_wrong));
+
                     view.setClickable(false);
 
                     if (onJokerDouble) {
@@ -81,7 +85,7 @@ public class Question {
                         for (int i = 0; i < 4; i++) {
                             if ((char) tvAnswers[i].getTag() == 'A') {
                                 //todo
-                                tvAnswers[i].setBackgroundColor(Color.GREEN);
+                                tvAnswers[i].setBackground(Statics.getDrawable(R.drawable.btn_answer_correct));
                                 break;
                             }
                         }
@@ -314,7 +318,7 @@ public class Question {
         tvAnswers[2] = (TextView) _VIEW.findViewById(R.id.tvAnswerC);
         tvAnswers[3] = (TextView) _VIEW.findViewById(R.id.tvAnswerD);
 
-        tvQuestion.setText(getQuestion());
+        tvQuestion.setText((Statics.player.getQuestionCombo() + 1) + ")" + getQuestion());
 
         //todo
         int[][] orders = new int[][]{
@@ -358,7 +362,7 @@ public class Question {
             }
 
             tvAnswers[i].setText(prefix + tvAnswers[i].getText());
-            tvAnswers[i].setBackgroundColor(Color.WHITE); //todo
+            tvAnswers[i].setBackground(Statics.getDrawable(R.drawable.btn_answer));
             tvAnswers[i].setClickable(true);
             tvAnswers[i].setOnClickListener(listenerAnswer);
         }
@@ -395,6 +399,19 @@ public class Question {
 
     //endregion
 
+    public void updateUI(){
+        ((TextView) view.findViewById(R.id.tvJokerHalf)).setText(String.valueOf(Statics.player.getJokerHalf()));
+
+        //todo icon
+        ((TextView) view.findViewById(R.id.tvJokerDouble)).setText(String.valueOf(Statics.player.getJokerDouble()));
+
+        //todo icon
+        ((TextView) view.findViewById(R.id.tvJokerTime)).setText(String.valueOf(Statics.player.getJokerTime()));
+
+        //todo icon
+        ((TextView) view.findViewById(R.id.tvJokerPass)).setText(String.valueOf(Statics.player.getJokerPass()));
+    }
+
     //region Jokers
 
     public void jokerHalf() {
@@ -427,7 +444,7 @@ public class Question {
             }
         } else {
             //todo
-
+MainActivity.jokerPopup();
             Log.e("asdas", "jokerin yok");
         }
     }
@@ -437,16 +454,18 @@ public class Question {
             this.onJokerDouble = true;
         } else {
             //todo
+            MainActivity.jokerPopup();
 
             Log.e("asdas", "jok111erin yok");
         }
     }
 
-    public void jokerPass(){
+    public void jokerPass() {
         if (Statics.player.getJokerPass() > 0) {
-           correctAnswer();
+            correctAnswer();
         } else {
             //todo
+            MainActivity.jokerPopup();
 
             Log.e("asdas", "jok111erin yok");
         }
@@ -458,6 +477,7 @@ public class Question {
             this.remainingTime += 15;
         } else {
             //todo
+            MainActivity.jokerPopup();
 
             Log.e("asdas", "jok111erin y11111ok");
         }
@@ -480,23 +500,35 @@ public class Question {
         Statics.player.incrementPoint(Statics.player.calcQuestionPoint());
         Statics.player.incrementQuestion();
         Statics.player.setResuming(true);
-
-        MainActivity.showNextQuestion(remainingTime);
-
         Statics.player.saveGame();
+
+
+        new CountDownTimer(Consts.WAIT_AFTER_CORRECT_ANSWER * 1000, 500) {
+            @Override
+            public void onTick(long l) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                ((Activity) Statics.context).runOnUiThread(new Runnable() {
+                    public void run() {
+                        MainActivity.showNextQuestion(remainingTime);
+                    }
+                });
+            }
+        }.start();
     }
 
     public void wrongAnswer() {
         //todo
-
-
         if (Statics.player.getLife() > 0) {
             View.OnClickListener left = new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     //todo sayfa aç
 
-                    popUpHelper.hideView();
+                    Statics.popUp.hideView();
 
                     //reset todo
                     Statics.player.setResuming(false);
@@ -513,24 +545,37 @@ public class Question {
                     //todo
                     Statics.player.decrementLife();
                     load();
-                    popUpHelper.hideView();
+                    Statics.popUp.hideView();
 
                     Statics.player.saveGame();
                 }
             };
 
 
-            popUpHelper = new PopUpHelper("Devam etmek için can kullanmak istermisiniz ?", "", "Hayır", "Evet", left, right);
-            MainActivity.mainLayout.addView(popUpHelper.getView());
+            Statics.popUp = new PopUpHelper("Devam etmek için can kullanmak istermisiniz ?", "", "Hayır", "Evet", left, right);
+            MainActivity.mainLayout.addView(Statics.popUp.getView());
             isPaused = true;
-        }else{
+        } else {
             isFinished = true;
             Statics.player.resetQuestion();
             Statics.player.setResuming(false);
-
-            MainActivity.showLoseScreen();
-
             Statics.player.saveGame();
+
+            new CountDownTimer(Consts.WAIT_AFTER_WRONG_ANSWER * 1000, 1000) {
+                @Override
+                public void onTick(long l) {
+
+                }
+
+                @Override
+                public void onFinish() {
+                    ((Activity) Statics.context).runOnUiThread(new Runnable() {
+                        public void run() {
+                            MainActivity.showLoseScreen();
+                        }
+                    });
+                }
+            }.start();
         }
 
         Log.e("asdas", " kaybettin zenci");

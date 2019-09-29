@@ -3,4 +3,18 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+
+
+    <color name="colorButtonAnswer">#4281f5</color>
+    <color name="colorButtonAnswerRipple">#42a7f5</color>
+
+    <color name="colorButtonAnswerCorrect">#0acf59</color>
+    <color name="colorButtonAnswerRippleCorrect">#10de62</color>
+
+    <color name="colorButtonAnswerWrong">#d91818</color>
+    <color name="colorButtonAnswerRippleWrong">#d60404</color>
+
+
+    <color name="textColor">#FFFFFF</color>
+
 </resources>

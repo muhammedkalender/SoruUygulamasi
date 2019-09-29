@@ -16,7 +16,7 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_centerHorizontal="true"
-            android:background="#000" />
+          android:src="@drawable/ic_pause_circle_outline" />
 
         <TextView
             android:id="@+id/tvPause"
@@ -47,7 +47,7 @@
                 android:id="@+id/ivHomePage"
                 android:layout_width="80dp"
                 android:layout_height="60dp"
-                android:background="#000" />
+              android:src="@drawable/ic_home" />
 
             <TextView
                 android:id="@+id/tvHomePage"
@@ -71,7 +71,7 @@
                 android:id="@+id/ivResume"
                 android:layout_width="80dp"
                 android:layout_height="60dp"
-                android:background="#000" />
+              android:src="@drawable/ic_play_arrow" />
 
             <TextView
                 android:id="@+id/tvResume"

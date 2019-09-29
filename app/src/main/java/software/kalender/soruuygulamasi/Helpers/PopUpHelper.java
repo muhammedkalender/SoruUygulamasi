@@ -24,6 +24,7 @@ public class PopUpHelper {
     private Context context;
     private boolean isWithOptions = false;
     private View view;
+    private boolean show = false;
 
     public PopUpHelper(String message, String icon, String optionMiddle, View.OnClickListener optionClick) {
         this.message = message;
@@ -32,7 +33,7 @@ public class PopUpHelper {
         this.optionClick = optionClick;
         this.context = Statics.context;
 
-        if(optionClick == null){
+        if (optionClick == null) {
             this.optionClick = new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -54,6 +55,24 @@ public class PopUpHelper {
         this.context = Statics.context;
 
         isWithOptions = true;
+
+        if (leftOptionClick == null) {
+            this.leftOptionClick = new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    PopUpHelper.this.hideView();
+                }
+            };
+        }
+
+        if (rightOptionClick == null) {
+            this.rightOptionClick = new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    PopUpHelper.this.hideView();
+                }
+            };
+        }
     }
 
     public View getView() {
@@ -65,7 +84,7 @@ public class PopUpHelper {
     }
 
     public View getViewWithOptions() {
-       view = LayoutInflater.from(context).inflate(R.layout.popup_with_options, null);
+        view = LayoutInflater.from(context).inflate(R.layout.popup_with_options, null);
 
         ((TextView) view.findViewById(R.id.tvPopUp)).setText(message);
         ((Button) view.findViewById(R.id.btnPopUpOptionLeft)).setText(optionLeft);
@@ -73,26 +92,47 @@ public class PopUpHelper {
         ((Button) view.findViewById(R.id.btnPopUpOptionLeft)).setOnClickListener(leftOptionClick);
         ((Button) view.findViewById(R.id.btnPopUpOptionRight)).setOnClickListener(rightOptionClick);
 
+        setShow(true);
+
         return view;
     }
 
     public View getViewConfirm() {
-       view = LayoutInflater.from(context).inflate(R.layout.popup_confirm, null);
+        view = LayoutInflater.from(context).inflate(R.layout.popup_confirm, null);
 
         ((TextView) view.findViewById(R.id.tvPopUp)).setText(message);
         ((Button) view.findViewById(R.id.btnPopUpOption)).setText(optionMiddle);
         ((Button) view.findViewById(R.id.btnPopUpOption)).setOnClickListener(optionClick);
 
+        setShow(true);
+
         return view;
     }
 
-    public void hideView(){
+    public void hideView() {
         try {
-            ((RelativeLayout)(view.getParent())).removeView(view);
-        }catch (Exception e){
-            Reporter.error("POPUP_REMOVE",e);
+            ((RelativeLayout) (view.getParent())).removeView(view);
+            setShow(false);
+        } catch (Exception e) {
+            Reporter.error("POPUP_REMOVE", e);
         }
     }
 
+    public boolean isShow() {
+        return show;
+    }
 
+    public void setShow(boolean show) {
+        this.show = show;
+    }
+
+    public void forceNegative() {
+        if (isShow()) {
+            if (leftOptionClick != null) {
+                leftOptionClick.onClick(null);
+            } else {
+                optionClick.onClick(null);
+            }
+        }
+    }
 }

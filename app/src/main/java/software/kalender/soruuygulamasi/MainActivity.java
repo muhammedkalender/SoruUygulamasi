@@ -5,15 +5,27 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+
+import com.google.android.gms.ads.reward.RewardItem;
+import com.google.android.gms.ads.reward.RewardedVideoAd;
+import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -34,6 +46,9 @@ import com.google.firebase.FirebaseApp;
 
 import org.w3c.dom.Text;
 
+import java.util.Random;
+
+import software.kalender.soruuygulamasi.Animations.TextAnimation;
 import software.kalender.soruuygulamasi.Database.Database;
 import software.kalender.soruuygulamasi.Enums.RequestCodes;
 import software.kalender.soruuygulamasi.Helpers.AssetsHelper;
@@ -56,34 +71,27 @@ public class MainActivity extends AppCompatActivity {
     GoogleApiClient apiClient;
 
 
+    public static RewardedVideoAd mRewardedVideoAd;
+
+
     public static Question question;
     public static RelativeLayout mainLayout;
     public static TextView tvLife, tvPoint;
+    public static ImageView ivPause;
 
     public static AchievementsClient achievementsClient;
 
-    PopUpHelper popUpHelper;
+    private CountDownTimer cdtPause;
+
+    public static boolean isLiveAd = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
+        loadGame();
         //region Initalize statics
 
-        Statics.context = getApplicationContext();
-
-        Statics.database = new Database(this, "questions", null, 1);
-        Statics.config = new Config(this);
-        Statics.soundHelper = new SoundHelper(this);
-        Statics.player = new PlayerHelper(this);
-        Statics.textHelper = new TextHelper();
-        Statics.staticsHelper = new StaticsHelper();
-        Statics.firebase = new FirebaseHelper();
-
-        mainLayout = findViewById(R.id.rlMain);
-        tvLife = findViewById(R.id.tvLife);
-        tvPoint = findViewById(R.id.tvPoint);
 
         //endregion
 
@@ -99,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
 
         //endregion
 
-        firstOpen();
 
         //todo   showHomePage(null);
 
@@ -107,17 +114,6 @@ public class MainActivity extends AppCompatActivity {
 //        question.loadFromDB(-1, -1);
 //
 //        question.loadView(findViewById(R.id.rlScreenQuestion));
-
-
-        GoogleSignInOptions.Builder builder = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN);
-        builder.requestScopes(Games.SCOPE_GAMES);
-        //builder.requestScopes(Drive.SCOPE_APPFOLDER);
-        //builder.requestScopes(Games.SCOPE_GAMES_LITE);
-        builder.requestEmail();
-        GoogleSignInOptions gso = builder.build();
-        GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RequestCodes.PLAY_LOGIN);
 
 
         //snapshotsClient.commitAndClose()
@@ -133,21 +129,6 @@ public class MainActivity extends AppCompatActivity {
 //                    }
 //                }).build();
 
-        updateUI();
-
-        FirebaseApp.initializeApp(this);
-
-        FirebaseHelper firebaseHelper = new FirebaseHelper();
-        firebaseHelper.checkOptionalUpdate();
-
-//        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-//            @Override
-//            public void onInitializationComplete(InitializationStatus initializationStatus) {
-//                AdView adView = new AdView(MainActivity.this);
-//                adView.setAdSize(AdSize.BANNER);
-//                adView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
-//            }
-//        });
     }
 
 
@@ -157,6 +138,137 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == RequestCodes.PLAY_LOGIN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
+
+            setContentView(R.layout.activity_main);
+
+            mainLayout = findViewById(R.id.rlMain);
+            tvLife = findViewById(R.id.tvLife);
+            tvPoint = findViewById(R.id.tvPoint);
+            ivPause = findViewById(R.id.ivPause);
+
+            firstOpen();
+
+            updateUI();
+
+            //todo
+            mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(this);
+            mRewardedVideoAd.setRewardedVideoAdListener(new RewardedVideoAdListener() {
+                @Override
+                public void onRewardedVideoAdLoaded() {
+                    findViewById(R.id.llLife).setEnabled(true);
+                }
+
+                @Override
+                public void onRewardedVideoAdOpened() {
+                    question.pauseGame();
+                }
+
+                @Override
+                public void onRewardedVideoStarted() {
+                }
+
+                @Override
+                public void onRewardedVideoAdClosed() {
+                    question.resumeGame();
+                }
+
+                @Override
+                public void onRewarded(RewardItem rewardItem) {
+                    if (isLiveAd) {
+                        Statics.player.incrementLife();
+                        Statics.player.saveGame();
+
+                        isLiveAd = false;
+
+                        updateUI();
+
+                        Statics.popUp = new PopUpHelper("Bir can kazandın !!!", "", "Tamam", null);
+                        MainActivity.mainLayout.addView(Statics.popUp.getViewConfirm());
+                    } else {
+                        //todo
+
+                        String message = "";
+
+                        int random = Statics.random.nextInt(101);
+
+                        if (random <= Consts.CHANGE_JOKER_HALF) {
+                            //[0, 45]
+                            Statics.player.incrementJokerHalf();
+
+                            message = "Yarı Yarıya";
+                        } else if (random <= Consts.CHANGE_JOKER_HALF + Consts.CHANGE_JOKER_DOUBLE) {
+                            //[46, 85]
+                            Statics.player.incrementJokerDouble();
+
+                            message = "Çift Cevap";
+                        } else if (random <= Consts.CHANGE_JOKER_HALF + Consts.CHANGE_JOKER_DOUBLE + Consts.CHANGE_JOKER_TIME) {
+                            //[86, 95]
+                            Statics.player.incrementJokerTime();
+
+                            message = "Zaman";
+                        } else {
+                            //[96, 100]
+                            Statics.player.incrementJokerPass();
+
+                            message = "Pas Geçme";
+                        }
+
+                        Statics.player.saveGame();
+
+                        question.updateUI();
+                        updateUI();
+
+                        Statics.popUp.hideView();
+
+                        Statics.popUp = new PopUpHelper( message+" Jokeri Kazandın", "", "Tamam" ,null);
+                        MainActivity.mainLayout.addView(Statics.popUp.getViewConfirm());
+                    }
+                }
+
+                @Override
+                public void onRewardedVideoAdLeftApplication() {
+
+                }
+
+                @Override
+                public void onRewardedVideoAdFailedToLoad(int i) {
+                    findViewById(R.id.llLife).setEnabled(false);
+                }
+
+                @Override
+                public void onRewardedVideoCompleted() {
+
+                }
+            });
+
+            //todo
+            mRewardedVideoAd.loadAd("ca-app-pub-3940256099942544/5224354917",
+                    new AdRequest.Builder().build());
+
+            findViewById(R.id.llLife).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    View.OnClickListener clickRight = new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Statics.popUp.hideView();
+
+                            if (mRewardedVideoAd.isLoaded()) {
+                                isLiveAd = true;
+
+                                mRewardedVideoAd.show();
+                            }
+
+                        }
+                    };
+
+                    Statics.popUp = new PopUpHelper("Can kazanmak için reklam izleyin !!!", "", "Sonra", "Hemen İzle !", null, clickRight);
+                    MainActivity.mainLayout.addView(Statics.popUp.getViewWithOptions());
+                }
+            });
+
+            AdRequest adRequest = new AdRequest.Builder().build();
+            ((AdView) findViewById(R.id.adView)).loadAd(adRequest);
         }
     }
 
@@ -168,7 +280,7 @@ public class MainActivity extends AppCompatActivity {
                 Statics.googleID = account.getId();
 
                 FirebaseHelper firebaseHelper = new FirebaseHelper();
-              // firebaseHelper.saveGame();
+                // firebaseHelper.saveGame();
                 firebaseHelper.loadSave();
             }
 
@@ -271,8 +383,9 @@ public class MainActivity extends AppCompatActivity {
             mainLayout.findViewById(R.id.btnResume).setClickable(false);
         }
 
-        showScreen(R.id.screenMain);
+        ivPause.setVisibility(View.INVISIBLE);
 
+        showScreen(R.id.screenMain);
 
         updateUI();
     }
@@ -290,6 +403,8 @@ public class MainActivity extends AppCompatActivity {
                 question = new Question();
                 question.loadFromDB(Statics.player.getQuestionCategory(), Statics.player.getQuestionDifficulty());
                 question.loadView(findViewById(R.id.screenQuestion));
+                ivPause.setVisibility(View.VISIBLE);
+                ivPause.setImageResource(R.drawable.ic_pause_circle_outline);
                 showScreen(R.id.screenQuestion);
             }
         };
@@ -341,30 +456,54 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static void showNextQuestion(int remainingTime) {
-        if (remainingTime > 30) {
+        int drawStar = 0;
+
+        if (remainingTime > Consts.STAR_THREE) {
             //3 Yıldız
 
-            ((ImageView) mainLayout.findViewById(R.id.ivStat1)).setBackgroundColor(Color.GREEN);
-            ((ImageView) mainLayout.findViewById(R.id.ivStat2)).setBackgroundColor(Color.GREEN);
-            ((ImageView) mainLayout.findViewById(R.id.ivStat3)).setBackgroundColor(Color.GREEN);
-        } else if (remainingTime > 15) {
+            drawStar = 3;
+        } else if (remainingTime > Consts.STAR_TWO) {
             //2 Yıldız
 
-            ((ImageView) mainLayout.findViewById(R.id.ivStat1)).setBackgroundColor(Color.GREEN);
-            ((ImageView) mainLayout.findViewById(R.id.ivStat2)).setBackgroundColor(Color.GREEN);
-            ((ImageView) mainLayout.findViewById(R.id.ivStat3)).setBackgroundColor(Color.RED);
-        } else if (remainingTime > 5) {
+            drawStar = 2;
+        } else if (remainingTime > Consts.STAR_ONE) {
             //1 Yıldız
 
-            ((ImageView) mainLayout.findViewById(R.id.ivStat1)).setBackgroundColor(Color.GREEN);
-            ((ImageView) mainLayout.findViewById(R.id.ivStat2)).setBackgroundColor(Color.RED);
-            ((ImageView) mainLayout.findViewById(R.id.ivStat3)).setBackgroundColor(Color.RED);
+            drawStar = 1;
         } else {
             //0 Yıldız
 
-            ((ImageView) mainLayout.findViewById(R.id.ivStat1)).setBackgroundColor(Color.RED);
-            ((ImageView) mainLayout.findViewById(R.id.ivStat2)).setBackgroundColor(Color.RED);
-            ((ImageView) mainLayout.findViewById(R.id.ivStat3)).setBackgroundColor(Color.RED);
+            drawStar = 0;
+        }
+
+        Animation fadeIn = new AlphaAnimation(0, 1);
+        fadeIn.setInterpolator(new DecelerateInterpolator()); //add this
+        fadeIn.setDuration(Consts.ANIMATION_DURATION_STAR_FADE * 1000);
+
+        if (drawStar == 0) {
+            ((ImageView) mainLayout.findViewById(R.id.ivStar1)).setImageResource(R.drawable.ic_star_border);
+            ((ImageView) mainLayout.findViewById(R.id.ivStar2)).setImageResource(R.drawable.ic_star_border);
+            ((ImageView) mainLayout.findViewById(R.id.ivStar3)).setImageResource(R.drawable.ic_star_border);
+        }
+
+        if (drawStar > 0) {
+            ((ImageView) mainLayout.findViewById(R.id.ivStar1)).setImageResource(R.drawable.ic_star);
+            ((ImageView) mainLayout.findViewById(R.id.ivStar1)).setAnimation(fadeIn);
+
+            ((ImageView) mainLayout.findViewById(R.id.ivStar2)).setImageResource(R.drawable.ic_star_border);
+            ((ImageView) mainLayout.findViewById(R.id.ivStar3)).setImageResource(R.drawable.ic_star_border);
+        }
+
+        if (drawStar > 1) {
+            ((ImageView) mainLayout.findViewById(R.id.ivStar2)).setImageResource(R.drawable.ic_star);
+            ((ImageView) mainLayout.findViewById(R.id.ivStar2)).setAnimation(fadeIn);
+
+            ((ImageView) mainLayout.findViewById(R.id.ivStar3)).setImageResource(R.drawable.ic_star_border);
+        }
+
+        if (drawStar == 3) {
+            ((ImageView) mainLayout.findViewById(R.id.ivStar3)).setImageResource(R.drawable.ic_star);
+            ((ImageView) mainLayout.findViewById(R.id.ivStar3)).setAnimation(fadeIn);
         }
 
         showScreen(R.id.screenAfterQuest);
@@ -386,12 +525,19 @@ public class MainActivity extends AppCompatActivity {
         question.loadFromDB(Statics.player.getQuestionCategory(), Statics.player.getQuestionDifficulty());
         question.loadView(mainLayout);
 
+
         showScreen(R.id.screenQuestion);
+
+
     }
 
     public void unpauseGame(View view) {
         //todo
         question.resumeGame();
+
+        ivPause.setImageResource(R.drawable.ic_pause_circle_outline);
+
+        cdtPause.cancel();
     }
 
     public void buyItem(View view) {
@@ -401,7 +547,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //todo
-                popUpHelper.hideView();
+                Statics.popUp.hideView();
             }
         };
 
@@ -416,16 +562,16 @@ public class MainActivity extends AppCompatActivity {
                     case 0:
                         break;
                     case 1:
-                        popUpHelper.hideView();
-                        popUpHelper = new PopUpHelper("Ürünü almak için puanınız yetersiz", "", "Tamam", null);
-                        MainActivity.mainLayout.addView(popUpHelper.getViewConfirm());
+                        Statics.popUp.hideView();
+                        Statics.popUp = new PopUpHelper("Ürünü almak için puanınız yetersiz", "", "Tamam", null);
+                        MainActivity.mainLayout.addView(Statics.popUp.getViewConfirm());
                         break;
                 }
             }
         };
 
-        popUpHelper = new PopUpHelper("Ürünü almak istediğinize eminmisiniz ?", "", "Hayır", "Evet", left, right);
-        MainActivity.mainLayout.addView(popUpHelper.getViewWithOptions());
+        Statics.popUp = new PopUpHelper("Ürünü almak istediğinize eminmisiniz ?", "", "Hayır", "Evet", left, right);
+        MainActivity.mainLayout.addView(Statics.popUp.getViewWithOptions());
     }
 
     public void showStore(View view) {
@@ -434,9 +580,26 @@ public class MainActivity extends AppCompatActivity {
         showScreen(R.id.screenStore);
     }
 
+    public void pauseGame(View v) {
+        question.pauseGame();
+        ivPause.setImageResource(R.drawable.ic_play_circle_outline);
+        ivPause.setVisibility(View.VISIBLE);
+
+        cdtPause.start();
+    }
+
     @Override
     public void onBackPressed() {
-        if (findViewById(R.id.screenStore).getVisibility() == View.VISIBLE) {
+        if (tvLife == null) {
+            //todo
+            super.onBackPressed();
+
+            return;
+        }
+
+        if (Statics.popUp != null && Statics.popUp.isShow()) {
+            Statics.popUp.forceNegative();
+        } else if (findViewById(R.id.screenStore).getVisibility() == View.VISIBLE) {
             showScreen(R.id.screenMain);
         } else if (findViewById(R.id.screenLoseGame).getVisibility() == View.VISIBLE) {
             showScreen(R.id.screenMain);
@@ -449,9 +612,88 @@ public class MainActivity extends AppCompatActivity {
         } else if (findViewById(R.id.screenPause).getVisibility() == View.VISIBLE) {
             question.resumeGame();
         } else if (findViewById(R.id.screenQuestion).getVisibility() == View.VISIBLE) {
-            question.pauseGame();
+            pauseGame(null);
         } else {
             super.onBackPressed();
         }
+    }
+
+    public static void jokerPopup() {
+
+        //todo negatie
+
+        String message = Statics.context.getString(R.string.popup_video_reward, Consts.CHANGE_JOKER_HALF, Consts.CHANGE_JOKER_DOUBLE, Consts.CHANGE_JOKER_TIME, Consts.CHANGE_JOKER_PASS);
+
+        View.OnClickListener clickRight = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                isLiveAd = false;
+
+                if (mRewardedVideoAd.isLoaded()) {
+                    mRewardedVideoAd.show();
+                }
+            }
+        };
+
+        Statics.popUp = new PopUpHelper(message, "", "Daha Sonra", "Hemen İzle !!!", null, clickRight);
+        MainActivity.mainLayout.addView(Statics.popUp.getViewWithOptions());
+    }
+
+    private void loadGame() {
+        setContentView(R.layout.activity_loading);
+
+        Statics.context = MainActivity.this;
+
+        Statics.database = new Database(this, "questions", null, 1);
+        Statics.config = new Config(this);
+        Statics.soundHelper = new SoundHelper(this);
+        Statics.player = new PlayerHelper(this);
+        Statics.textHelper = new TextHelper();
+        Statics.staticsHelper = new StaticsHelper();
+        Statics.firebase = new FirebaseHelper();
+
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
+
+        GoogleSignInOptions.Builder builder = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN);
+        builder.requestScopes(Games.SCOPE_GAMES);
+        //builder.requestScopes(Drive.SCOPE_APPFOLDER);
+        //builder.requestScopes(Games.SCOPE_GAMES_LITE);
+        builder.requestEmail();
+
+        GoogleSignInOptions gso = builder.build();
+
+        GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RequestCodes.PLAY_LOGIN);
+
+        FirebaseApp.initializeApp(this);
+
+        FirebaseHelper firebaseHelper = new FirebaseHelper();
+        firebaseHelper.checkOptionalUpdate();
+
+//        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+//            @Override
+//            public void onInitializationComplete(InitializationStatus initializationStatus) {
+//                AdView adView = new AdView(MainActivity.this);
+//                adView.setAdSize(AdSize.BANNER);
+//                adView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
+//            }
+//        });
+
+        cdtPause = new CountDownTimer(Consts.PAUSE_TIME * 1000, 5000) {
+            @Override
+            public void onTick(long l) {
+            }
+
+            @Override
+            public void onFinish() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showHomePage(null);
+                    }
+                });
+            }
+        };
     }
 }

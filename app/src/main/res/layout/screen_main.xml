@@ -6,47 +6,52 @@
     android:orientation="vertical">
 
     <Button
-        android:onClick="resumeGame"
         android:id="@+id/btnResume"
+        style="@style/styleButton"
         android:alpha="0.7"
         android:clickable="false"
-        android:text="Devam Et"
-        android:layout_width="240dp"
-        android:layout_height="60dp" />
+        android:drawableLeft="@drawable/ic_play_arrow"
+        android:onClick="resumeGame"
+        android:text="Devam Et" />
 
     <Button
-        android:onClick="newGame"
         android:id="@+id/btnNewGame"
-        android:text="Yeni Oyun"
-        android:layout_width="240dp"
-        android:layout_height="60dp" />
+        style="@style/styleButton"
+
+        android:drawableLeft="@drawable/ic_home"
+        android:onClick="newGame"
+        android:text="Yeni Oyun" />
 
     <Button
-        android:onClick="showStore"
         android:id="@+id/btnStore"
-        android:text="Mağaza"
-        android:layout_width="240dp"
-        android:layout_height="60dp" />
+        style="@style/styleButton"
+
+
+        android:drawableLeft="@drawable/ic_local_grocery_store"
+        android:onClick="showStore"
+        android:text="Mağaza" />
 
     <Button
-        android:onClick="viewAchievement"
         android:id="@+id/btnAchievements"
-        android:text="Başarımlar"
-        android:layout_width="240dp"
-        android:layout_height="60dp" />
+        style="@style/styleButton"
+
+        android:onClick="viewAchievement"
+        android:text="Başarımlar" />
 
     <Button
-        android:onClick="viewLeaderBoard"
         android:id="@+id/btnLeaderBoard"
-        android:text="Sıralama"
-        android:layout_width="240dp"
-        android:layout_height="60dp" />
+        style="@style/styleButton"
+
+
+        android:onClick="viewLeaderBoard"
+        android:text="Sıralama" />
 
     <Button
-        android:onClick="viewSettings"
         android:id="@+id/btnSettings"
-        android:text="Ayarlar"
-        android:layout_width="240dp"
-        android:layout_height="60dp" />
+        style="@style/styleButton"
+
+        android:drawableLeft="@drawable/ic_build"
+        android:onClick="viewSettings"
+        android:text="Ayarlar" />
 
 </LinearLayout>
